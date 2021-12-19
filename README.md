@@ -1,5 +1,5 @@
 # COMP3005 Final Project
-##Summary
+## Summary
 This project creates an interface between a database and both customers and administrators for a simulated book store.
 
 ## How to run
