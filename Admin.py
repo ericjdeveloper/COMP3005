@@ -55,9 +55,7 @@ class AdminBookView(BookView):
         handles whether 'add' or 'remove'
         should be displayed
     """
-    def set_instance(self, instance: dict):
-        super().set_instance(instance)
-
+    def select(self, instance: dict):
         #manage commands for adding/removing item from selling list based on for_sale
         if instance["for_sale"] is 1:
             self.remove_command("a")
@@ -65,6 +63,9 @@ class AdminBookView(BookView):
         else:
             self.remove_command("r")
             self.add_command("a", self.add_item, "add", "Add item back to selling list")
+            
+        super().select(instance)
+
 
     """
     add_item:
@@ -135,8 +136,8 @@ def add_book(params):
     author_list_handler = ItemListHandler(Authors, ["author_name"])
     selectable = ListData()
     authorList = SelectorList(author_list_handler, selectable, ["author_name"])
-    success = authorList.start()
-    if not success:
+    authorList.start()
+    if selectable.selected is None:
         return
     author = str(selectable.selected["author_id"])
 
@@ -146,8 +147,8 @@ def add_book(params):
     genre_list_handler = ItemListHandler(Genres, ["genre_name"])
     selectable = ListData()
     genre_list = SelectorList(genre_list_handler, selectable, ["genre_name"])
-    success = genre_list.start()
-    if not success:
+    genre_list.start()
+    if selectable.selected is None:
         return
     genre = str(selectable.selected["genre_id"])
 
@@ -157,8 +158,8 @@ def add_book(params):
     publisher_list_handler = ItemListHandler(Publishers, ["publisher_name"])
     selectable = ListData()
     publisher_list = SelectorList(publisher_list_handler, selectable, ["publisher_name", "address", "email", "banking_info"])
-    success = publisher_list.start()
-    if not success:
+    publisher_list.start()
+    if selectable.selected is None:
         return
     publisher = str(selectable.selected["publisher_id"])
 

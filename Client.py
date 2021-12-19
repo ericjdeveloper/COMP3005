@@ -138,7 +138,7 @@ class CheckoutExecutor(Executor):
             BookCore.update_values(["current_inventory", "for_sale"], [str(inv_cnt - 1), '0' if inv_cnt is 0 else '1'], ["isbn = {0}".format(isbn)])
 
             #if the inventory goes below the threshold, send an email to the publisher
-            if  inv_cnt <= int(book_data["restock_threshold"]):
+            if  int(inv_cnt) <= int(book_data["restock_threshold"]):
                 pub_data = objectify(Publishers.get(["publisher_id = {0}".format(book_data["publisher_id"])]))[0]
                 print("[NOTE TO {0}: SEND US MORE INVENTORY!!]".format(pub_data["email"]))
 

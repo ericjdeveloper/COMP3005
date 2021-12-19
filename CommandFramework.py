@@ -81,7 +81,6 @@ class Executor:
                 except:
                     #if no match found, continue the loop
                     print("Command not found. Please try again.")
-                    called_command = input().lower()
 
             #get the command
             cmd = self.functions[command][0]

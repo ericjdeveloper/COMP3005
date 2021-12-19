@@ -47,8 +47,7 @@ class ItemView(Executor, ListData):
             to print the detailed info about the item
     """
     def __init__(self, item, viewerFunc=print):
-        super().__init__()
-        
+        super().__init__()        
         self.item = item
         self.viewerFunc = viewerFunc
         
@@ -70,7 +69,7 @@ class ItemView(Executor, ListData):
         functionality when selected
     """
     def select(self, selected: dict):
-        super().__init__(selected)
+        super().select(selected)
         self.start()
 
     """
@@ -400,6 +399,6 @@ class SelectorList(ListView):
         entry = self.list_handler.item.insert_value(self.cdc, data)
         #select the given item
         self.data_handler.select(entry)
-        return True
+        return False
 
               
