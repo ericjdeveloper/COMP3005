@@ -68,16 +68,16 @@ VALUES (286100, 1, '1133 Scofield lane');
 
 --insert 6 book orders
 INSERT INTO ordered_books (order_id, isbn, cost, publisher_fee)
-VALUES (0, 2, 20, 5);
+VALUES (1, 2, 20, 5);
 INSERT INTO ordered_books (order_id, isbn, cost, publisher_fee)
-VALUES (0, 3, 26, 3);
+VALUES (1, 3, 26, 3);
 INSERT INTO ordered_books (order_id, isbn, cost, publisher_fee)
-VALUES (0, 5, 34, 26);
+VALUES (1, 5, 34, 26);
 
 INSERT INTO ordered_books (order_id, isbn, cost, publisher_fee)
-VALUES (1, 0, 81, 5);
+VALUES (2, 0, 81, 5);
 INSERT INTO ordered_books (order_id, isbn, cost, publisher_fee)
-VALUES (1, 2, 23, 7);
+VALUES (2, 2, 23, 7);
 
 INSERT INTO ordered_books (order_id, isbn, cost, publisher_fee)
-VALUES (2, 1, 5, 0);
+VALUES (3, 1, 5, 0);

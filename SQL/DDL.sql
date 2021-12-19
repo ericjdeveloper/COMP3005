@@ -2,11 +2,13 @@
 --https://github.com/ericjdeveloper/COMP3005
 
 --Tables:
+--table meant to store an author's information
 CREATE TABLE "authors" (
 	"author_id"	INTEGER NOT NULL,
 	"author_name"	TEXT NOT NULL,
 	PRIMARY KEY("author_id" AUTOINCREMENT)
 );
+--used to store book info such as the title, price, and current inventory
 CREATE TABLE "books" (
 	"title"	TEXT NOT NULL,
 	"isbn"	INTEGER NOT NULL,
@@ -23,11 +25,13 @@ CREATE TABLE "books" (
 	FOREIGN KEY("author_id") REFERENCES "authors"("author_id"),
 	FOREIGN KEY("genre_id") REFERENCES "genres"("genre_id")
 );
+--used to store the genre types
 CREATE TABLE "genres" (
 	"genre_id"	INTEGER NOT NULL,
 	"genre_name"	TEXT NOT NULL,
 	PRIMARY KEY("genre_id")
 );
+--used to store all instances of books that have been part of an order
 CREATE TABLE "ordered_books" (
 	"order_id"	INTEGER NOT NULL,
 	"isbn"	INTEGER NOT NULL,
@@ -35,6 +39,7 @@ CREATE TABLE "ordered_books" (
 	"publisher_fee"	INTEGER NOT NULL DEFAULT 0,
 	PRIMARY KEY("order_id","isbn")
 );
+--used to store all situations where the user checked out their cart
 CREATE TABLE "orders" (
 	"order_id"	INTEGER NOT NULL,
 	"tracking_number"	INTEGER NOT NULL,
@@ -42,6 +47,7 @@ CREATE TABLE "orders" (
 	"orderer_id"	INTEGER NOT NULL,
 	PRIMARY KEY("order_id")
 );
+--used to store all publishers and their info such as name and banking info
 CREATE TABLE "publishers" (
 	"publisher_id"	INTEGER NOT NULL,
 	"publisher_name"	INTEGER NOT NULL,
@@ -50,6 +56,7 @@ CREATE TABLE "publishers" (
 	"banking_info"	TEXT,
 	PRIMARY KEY("publisher_id" AUTOINCREMENT)
 );
+--list of all users registered to the system
 CREATE TABLE "users" (
 	"user_id"	INTEGER NOT NULL,
 	"name"	TEXT NOT NULL,
@@ -59,6 +66,8 @@ CREATE TABLE "users" (
 );
 
 --Views:
+--this view is used to consolidate all info
+--for a given book into a single table (including genre and publisher).
 CREATE VIEW book_view
 AS
 SELECT  books.title,
@@ -74,6 +83,9 @@ SELECT  books.title,
 	publisher_name AS publisher
 FROM books NATURAL JOIN authors NATURAL JOIN genres NATURAL JOIN publishers;
 
+--this view is used for getting all info
+--regarding a given transaction and setting
+--it into a single table
 CREATE VIEW transactions
 AS
 SELECT "order_id",
@@ -85,22 +97,3 @@ SELECT "order_id",
 	   "orderer_id"
 FROM
 	orders NATURAL JOIN ordered_books NATURAL JOIN books;
-
---Triggers:
-CREATE TRIGGER new_book_trigger
-INSTEAD OF INSERT
-ON book_view
-FOR EACH ROW
-BEGIN
-	INSERT INTO books (title, author_id, genre_id, publisher_id, price, page_count, sales_percentage, restock_threshold, current_inventory)
-	VALUES (NEW.title, NEW.author_id, NEW.genre_id, NEW.publisher_id, NEW.price, NEW.page_count, NEW.sales_percentage, NEW.restock_threshold, NEW.current_inventory);
-END;
-CREATE TRIGGER update_book
-INSTEAD OF UPDATE
-ON book_view
-FOR EACH ROW
-BEGIN
-	UPDATE books
-	SET title = NEW.title, price = NEW.price, for_sale = NEW.for_sale, page_count = NEW.page_count, sales_percentage = NEW.sales_percentage, restock_threshold = NEW.restock_threshold, current_inventory = NEW.current_inventory
-	WHERE isbn = NEW.isbn;
-END

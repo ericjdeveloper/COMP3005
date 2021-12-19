@@ -399,6 +399,6 @@ class SelectorList(ListView):
         entry = self.list_handler.item.insert_value(self.cdc, data)
         #select the given item
         self.data_handler.select(entry)
-        return False
+        return True
 
               
