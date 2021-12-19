@@ -12,6 +12,7 @@ View
 in order to provide the client
 with an interface to purchase books
 """
+from random import randrange
 from CommandFramework import Program
 from BookstoreFramework import *
 from View import *
@@ -40,7 +41,8 @@ class ClientBookView(BookView):
         command for adding an item to the cart
     """
     def add_to_cart(self, param):
-        cart.append(self.selected["isbn"])
+        if self.selected["isbn"] not in cart:
+            cart.append(self.selected["isbn"])
         return True
 
 """

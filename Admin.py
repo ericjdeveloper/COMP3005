@@ -14,7 +14,6 @@ with an interface to add/remove books from sale,
 as well as view their sales statistics
 """
 from os import system
-from random import randrange
 from CommandFramework import Program
 from BookstoreFramework import *
 from View import *
