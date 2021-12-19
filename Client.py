@@ -19,7 +19,7 @@ from View import *
 #creat the program
 pgm = Program()
 #list of books the client wishes to check out
-cart = [2]
+cart = []
 #clients data such as username and address
 client_info = None
 
@@ -40,7 +40,7 @@ class ClientBookView(BookView):
         command for adding an item to the cart
     """
     def add_to_cart(self, param):
-        cart.append(self.instance["isbn"])
+        cart.append(self.selected["isbn"])
         return True
 
 """

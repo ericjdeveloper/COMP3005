@@ -45,16 +45,13 @@ class ItemView(Executor, ListData):
         item: the DatabaseFramework Item type
         viewerFunc: the function used in the preamble
             to print the detailed info about the item
-        instance: instance used at startup, if required
     """
-    def __init__(self, item, viewerFunc=print, instance: dict=None):
+    def __init__(self, item, viewerFunc=print):
         super().__init__()
         
         self.item = item
         self.viewerFunc = viewerFunc
-        if instance is not None:
-            self.set_instance(instance)
-
+        
         #add the return function
         self.add_command("b", self.back, "back", "Returns to the item list")
 
@@ -64,24 +61,17 @@ class ItemView(Executor, ListData):
         now prints detailed information about the item
     """
     def preamble(self):
-        self.viewerFunc(self.instance)
+        self.viewerFunc(self.selected)
 
     """
     select
         [OVERRIDE]
-        sets the instance andstarts the executor
+        sets the instance and starts the executor
         functionality when selected
     """
     def select(self, selected: dict):
-        self.set_instance(selected)
+        super().__init__(selected)
         self.start()
-
-    """
-    set_instance:
-        sets the current data for the viewer to use
-    """
-    def set_instance(self, instance: dict):
-        self.instance = instance
 
     """
     back:
@@ -262,7 +252,7 @@ class ListView(Executor):
         self.list_handler = list_handler
         self.data_handler = data_handler
         self.discreet = discreet
-        
+       
         #add filter command if filterable
         if filterable:
             self.add_command('f', self.add_filter, "filt", "Filters results")
@@ -383,8 +373,8 @@ class SelectorList(ListView):
         item_handler: ItemView object
         custom_data_columns: columns required when creating a new entry
     """
-    def __init__(self, list_handler, item_handler, custom_data_columns: list):
-        super().__init__(list_handler, item_handler, discreet=True)
+    def __init__(self, list_handler, data_handler, custom_data_columns: list):
+        super().__init__(list_handler, data_handler, discreet=True)
         self.cdc = custom_data_columns
         #add command to create a new entry
         self.add_command('a', self.custom, "add", "Creates a new entry instead")
@@ -407,9 +397,9 @@ class SelectorList(ListView):
             data.append(value)
             
         #write the entry to the database
-        entry = self.listPrinter.item.insertValue(self.CDC, data)
+        entry = self.list_handler.item.insert_value(self.cdc, data)
         #select the given item
-        self.itemViewer.select(entry)
+        self.data_handler.select(entry)
         return True
 
               

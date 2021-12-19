@@ -19,7 +19,6 @@ from CommandFramework import Program
 from BookstoreFramework import *
 from View import *
 
-
 """
 print_book_admin:
     print function for books. includes admin-only data
@@ -73,7 +72,7 @@ class AdminBookView(BookView):
         adds an item back on to the selling list
     """
     def add_item(self, param):
-         self.item.update_values(["for_sale"], ['1'], ["isbn = {0}".format(self.instance["isbn"])])
+         self.item.update_values(["for_sale"], ['1'], ["isbn = {0}".format(self.selected["isbn"])])
          return True
 
     """
@@ -81,7 +80,7 @@ class AdminBookView(BookView):
         removes an item from the selling list
     """
     def remove_item(self, param):
-        self.item.update_values(["for_sale"], ['0'], ["isbn = {0}".format(self.instance["isbn"])])
+        self.item.update_values(["for_sale"], ['0'], ["isbn = {0}".format(self.selected["isbn"])])
         return True
 
 """
@@ -137,7 +136,9 @@ def add_book(params):
     author_list_handler = ItemListHandler(Authors, ["author_name"])
     selectable = ListData()
     authorList = SelectorList(author_list_handler, selectable, ["author_name"])
-    authorList.start()
+    success = authorList.start()
+    if not success:
+        return
     author = str(selectable.selected["author_id"])
 
     #create an item handler for genres
@@ -146,7 +147,9 @@ def add_book(params):
     genre_list_handler = ItemListHandler(Genres, ["genre_name"])
     selectable = ListData()
     genre_list = SelectorList(genre_list_handler, selectable, ["genre_name"])
-    genre_list.start()
+    success = genre_list.start()
+    if not success:
+        return
     genre = str(selectable.selected["genre_id"])
 
     #create an item handler for publishers
@@ -155,7 +158,9 @@ def add_book(params):
     publisher_list_handler = ItemListHandler(Publishers, ["publisher_name"])
     selectable = ListData()
     publisher_list = SelectorList(publisher_list_handler, selectable, ["publisher_name", "address", "email", "banking_info"])
-    publisher_list.start()
+    success = publisher_list.start()
+    if not success:
+        return
     publisher = str(selectable.selected["publisher_id"])
 
     #get restock and percentage values
